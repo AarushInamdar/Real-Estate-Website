@@ -4,6 +4,8 @@ import { Flex, Box, Text, Button } from '@chakra-ui/react';
 
 import { baseUrl, fetchApi} from '../utils/fetchApi'
 
+import Property from '../components/property'
+
 const Banner = ({purpose, title1, title2, desc1, desc2, buttonText, linkName, imageUrl}) => (
   <Flex flexWrap='wrap' justifyContent="center" alignItems="center" m="10">
     <Image src={imageUrl} width={500} height={300} alt="Banner"/>
@@ -34,7 +36,7 @@ export default function Home(propertiesForSale, propertiesForRent) {
       imageUrl='https://bayut-production.s3.eu-central-1.amazonaws.com/image/145426814/33973352624c48628e41f2ec460faba4'
       />
       <Flex flexWrap="wrap">
-
+        {propertiesForSale?.map((property) => <Property property={property} key={property.id} />)}
       </Flex>
 
       <Banner 
@@ -48,22 +50,18 @@ export default function Home(propertiesForSale, propertiesForRent) {
       imageUrl='https://bayut-production.s3.eu-central-1.amazonaws.com/image/110993385/6a070e8e1bae4f7d8c1429bc303d2008'
       />
     <Flex flexWrap="wrap">
+      {propertiesForSale?.map((property) => <Property property={property} key={property.id} />)}
 
     </Flex>
-
     </Box>
   );
 };
 
-
 export async function getStaticProps() {
-  try{
-    const propertyForSale = await fetchApi(`${baseUrl}/properties/list?locationExternalIDs=5002&purpose=for-sale&hitsPerPage=6`);
-    const propertyForRent = await fetchApi(`${baseUrl}/properties/list?locationExternalIDs=5002&purpose=for-rent&hitsPerPage=6`);
-  } catch (error) {
-    console.log('AN ERROR WAS CAUGHT');
-  }
-
+  
+  const propertyForSale = await fetchApi(`${baseUrl}/properties/list?locationExternalIDs=5002&purpose=for-sale&hitsPerPage=6`);
+  const propertyForRent = await fetchApi(`${baseUrl}/properties/list?locationExternalIDs=5002&purpose=for-rent&hitsPerPage=6`);
+  console.log('MY DATATATAT:', propertyForRent, propertyForSale)
   return {
     props: {
       propertiesForSale: propertyForSale?.hits,
